@@ -40,7 +40,7 @@ double p2 = deltaT/std::pow(deltaX,4);
 // output
 static unsigned int numFiles = 0;
 static std::string folderName = "realization";
-static std::string baseFileName = "Data";
+static std::string baseFileName = "./output/data";
 
 
 

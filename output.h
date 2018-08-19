@@ -34,26 +34,28 @@ void displayVector(Eigen::VectorXd b) {
 }
 
 void write_h_toFile(Eigen::VectorXd hLU, double time) {
-	numFiles = numFiles + 1;
 
 	std::string fileName;
-
 	char numstr[21];
-	sprintf(numstr, "%d", numFiles);
+	sprintf(numstr, "%d", ++numFiles);
 	fileName.append(baseFileName);
 	fileName.append(numstr);
 	fileName.append(".txt");
 
-	std::ofstream myfile("data.txt", std::ofstream::out | std::ofstream::app);
+	// Convert string to char *
+	char *name = new char[fileName.length()+1];
+	std::strcpy(name,fileName.c_str());
+
+	std::ofstream myfile(name, std::ofstream::out | std::ofstream::app);
 	if (myfile.is_open()) {
 		for (unsigned int i = 0; i < hLU.rows(); i++) {
 			myfile << hLU(i) << " ";
 		}
-		myfile << "\n";
 		myfile.close();
 	} else
 		std::cout << "Unable to open file";
 
+	delete[] name;
 }
 
 

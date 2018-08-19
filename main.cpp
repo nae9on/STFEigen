@@ -24,7 +24,7 @@ void tic() {
 void toc() {
 	std::cout << "Time elapsed: "
 			<< ((double) (clock() - tictoc_stack.top())) / CLOCKS_PER_SEC
-			<< std::endl;
+			<< " sec" << std::endl;
 	tictoc_stack.pop();
 }
 
@@ -32,6 +32,8 @@ typedef Eigen::Triplet<double> tripleData;
 
 int main(int argc, char** argv) {
 	assert(argc == 1);
+
+	tic();
 
 	// Declaration and initialization of h
 	Eigen::VectorXd hLU(h_size);
@@ -82,6 +84,7 @@ int main(int argc, char** argv) {
 
 		// Factorize A
 		solverLU.factorize(ALU);
+		//solverLU.compute(ALU);
 
 		// Update h
 		hLU = solverLU.solve(bLU);
@@ -106,6 +109,8 @@ int main(int argc, char** argv) {
 		if (flag == 0)
 			break;
 	}
+
+	toc();
 
 	return 0;
 }
