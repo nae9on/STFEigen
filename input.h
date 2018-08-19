@@ -30,7 +30,7 @@ unsigned long int h_size = N + 5;
 double c = 2.75;           // exponent used in deciding deltaT = deltaX^c;
 double deltaT = pow(deltaX, c);     // time step size
 double endTime = 122;          // end time of a realization
-unsigned int seN = 20;              // save every these many time steps
+unsigned long int seN = 20;              // save every these many time steps
 unsigned int N_Reals = 50;          // number of realizations
 
 //Discretization parameters
