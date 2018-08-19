@@ -1,8 +1,8 @@
 /*
  * update.h
  *
- *  Created on: Aug 14, 2018
- *      Author: nae9on
+ *  Created on: 20 Jul 2018
+ *      Author: msshah
  */
 
 #ifndef UPDATE_H_
@@ -31,11 +31,13 @@ void insertCoefficient(int id, int i, int j, double w,
 // Fill right hand side
 void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h) {
 	for (unsigned int i = 2; i < b.size() - 2; i++) {
-		b(i) = h(i);
-		b(i) += p1 * 0.5 * (h(i + 1) * h(i + 1) - h(i) * h(i))
-				/ (h(i) * h(i + 1));
-		b(i) -= p1 * 0.5 * (h(i) * h(i) - h(i - 1) * h(i - 1))
-				/ (h(i) * h(i - 1));
+		b(i) = h(i) -  p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ));
+	}
+}
+
+void initialize_h(double deltaX, Eigen::VectorXd h) {
+	for (unsigned int i = 0; i < h.size() ; i++) {
+		h(i) = 1 + 0.001*sin(6*(deltaX*i - 7)*(deltaX*i - 7));;
 	}
 
 }
@@ -51,7 +53,7 @@ void fillPentaDiagonal_Ineff(Eigen::SparseMatrix<double, Eigen::ColMajor> *A) {
 }
 
 // Efficient
-void fillPentaDiagonal(std::vector<tripleData>& coefficients, int N) {
+void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
 
 	// Fill left boundary
 	coefficients.push_back(tripleData(0, 0, 1));
@@ -60,12 +62,15 @@ void fillPentaDiagonal(std::vector<tripleData>& coefficients, int N) {
 	coefficients.push_back(tripleData(1, N - 3, -1));
 
 	// Fill the core entries
-	for (int i = 2; i <= N - 3; i++) {
-		coefficients.push_back(tripleData(i, i - 2, 0.7566));
-		coefficients.push_back(tripleData(i, i - 1, -3.0264));
-		coefficients.push_back(tripleData(i, i, 5.5396));
-		coefficients.push_back(tripleData(i, i + 1, -3.0264));
-		coefficients.push_back(tripleData(i, i + 2, 0.7566));
+	for (unsigned int i = 2; i <= N-3; i++) {
+		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
+		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
+
+		coefficients.push_back(tripleData(i, i - 2, h2*p2));
+		coefficients.push_back(tripleData(i, i - 1, -p2*(h1+3*h2)));
+		coefficients.push_back(tripleData(i, i, 3*p2*(h1+h2)+1));
+		coefficients.push_back(tripleData(i, i + 1, -p2*(3*h1+h2)));
+		coefficients.push_back(tripleData(i, i + 2, h1*p2));
 	}
 
 	// Fill right boundary
@@ -87,15 +92,15 @@ void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
 	coefficients.push_back(tripleData(1, N - 3, -1));
 
 	// Fill the core entries
-	for (int i = 2; i <= N - 3; i++) {
-		double h1 = 2 * h(i + 1) * h(i + 1) * h(i) * h(i) / (h(i + 1) + h(i));
-		double h2 = 2 * h(i - 1) * h(i - 1) * h(i) * h(i) / (h(i - 1) + h(i));
+	for (unsigned int i = 2; i <= N-3; i++) {
+		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
+		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 
-		coefficients.push_back(tripleData(i, i - 2, h2 * p2));
-		coefficients.push_back(tripleData(i, i - 1, -p2 * (h1 + 3 * h2)));
-		coefficients.push_back(tripleData(i, i, 3 * p2 * (h1 + h2) + 1));
-		coefficients.push_back(tripleData(i, i + 1, -p2 * (3 * h1 + h2)));
-		coefficients.push_back(tripleData(i, i + 2, h1 * p2));
+		coefficients.push_back(tripleData(i, i - 2, h2*p2));
+		coefficients.push_back(tripleData(i, i - 1, -p2*(h1+3*h2)));
+		coefficients.push_back(tripleData(i, i, 3*p2*(h1+h2)+1));
+		coefficients.push_back(tripleData(i, i + 1, -p2*(3*h1+h2)));
+		coefficients.push_back(tripleData(i, i + 2, h1*p2));
 	}
 
 	// Fill right boundary
@@ -104,5 +109,6 @@ void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
 	coefficients.push_back(tripleData(N - 1, 3, -1));
 	coefficients.push_back(tripleData(N - 1, N - 1, 1));
 }
+
 
 #endif /* UPDATE_H_ */

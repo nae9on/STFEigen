@@ -1,8 +1,8 @@
 /*
  * input.h
  *
- *  Created on: Aug 14, 2018
- *      Author: nae9on
+ *  Created on: 20 Jul 2018
+ *      Author: msshah
  */
 
 #ifndef INPUT_H_
@@ -29,17 +29,19 @@ unsigned long int h_size = N + 5;
 // Determine time step
 double c = 2.75;           // exponent used in deciding deltaT = deltaX^c;
 double deltaT = pow(deltaX, c);     // time step size
-double endTime = 45;          // end time of a realization
+double endTime = 122;          // end time of a realization
 unsigned int seN = 20;              // save every these many time steps
 unsigned int N_Reals = 50;          // number of realizations
 
 //Discretization parameters
-double p1 = deltaT / (deltaX * deltaX);
-double p2 = deltaT / std::pow(deltaX, 4);
+double p1 = deltaT/(deltaX*deltaX);
+double p2 = deltaT/std::pow(deltaX,4);
 
 // output
 static unsigned int numFiles = 0;
 static std::string folderName = "realization";
 static std::string baseFileName = "Data";
+
+
 
 #endif /* INPUT_H_ */

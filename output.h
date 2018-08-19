@@ -1,8 +1,8 @@
 /*
  * output.h
  *
- *  Created on: Aug 14, 2018
- *      Author: nae9on
+ *  Created on: 20 Jul 2018
+ *      Author: msshah
  */
 
 #ifndef OUTPUT_H_
@@ -26,7 +26,7 @@ void displayFullMatrix(Eigen::SparseMatrix<double, Eigen::ColMajor> A) {
 void displayVector(Eigen::VectorXd b) {
 	std::cout << "\n\nVector :\n";
 	for (int i = 0; i < b.rows(); i++) {
-		//std::cout << b(i) << "\n";
+		// std::cout << b(i) << "\n";
 		printf("%16.16f\n",b(i));
 
 	}
@@ -55,5 +55,7 @@ void write_h_toFile(Eigen::VectorXd hLU, double time) {
 		std::cout << "Unable to open file";
 
 }
+
+
 
 #endif /* OUTPUT_H_ */
