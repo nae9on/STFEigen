@@ -8,10 +8,6 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-# include <iostream>
-# include <fstream>
-# include <math.h>
-
 double L_flat = 15;        // length of the flat portion of the film
 unsigned long int N_init = pow(2, 8);  // number of grid points on the flat film
 double deltaX = L_flat / N_init;  // grid/mesh size
@@ -41,7 +37,5 @@ double p2 = deltaT/std::pow(deltaX,4);
 static unsigned int numFiles = 0;
 static std::string folderName = "realization";
 static std::string baseFileName = "./output/data";
-
-
 
 #endif /* INPUT_H_ */

@@ -53,7 +53,7 @@ void fillPentaDiagonal_Ineff(Eigen::SparseMatrix<double, Eigen::ColMajor> *A) {
 }
 
 // Efficient
-void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
+void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h, unsigned long int N) {
 
 	// Fill left boundary
 	coefficients.push_back(tripleData(0, 0, 1));
@@ -62,7 +62,7 @@ void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h,
 	coefficients.push_back(tripleData(1, N - 3, -1));
 
 	// Fill the core entries
-	for (unsigned int i = 2; i <= N-3; i++) {
+	for (unsigned long int i = 2; i <= N-3; i++) {
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 
@@ -81,7 +81,7 @@ void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h,
 }
 
 // Efficient
-void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
+void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, unsigned long int N) {
 
 	coefficients.clear();
 
@@ -92,7 +92,7 @@ void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, int N) {
 	coefficients.push_back(tripleData(1, N - 3, -1));
 
 	// Fill the core entries
-	for (unsigned int i = 2; i <= N-3; i++) {
+	for (unsigned long int i = 2; i <= N-3; i++) {
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 
