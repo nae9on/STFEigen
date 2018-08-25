@@ -37,7 +37,8 @@ void write_h_toFile(Eigen::VectorXd hLU, double time) {
 
 	std::string fileName;
 	char numstr[21];
-	sprintf(numstr, "%d", ++numFiles);
+	++numFiles;
+	sprintf(numstr, "%1.5f", time);
 	fileName.append(baseFileName);
 	fileName.append(numstr);
 	fileName.append(".txt");
