@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 		// displayFullMatrix(ALU);
 
 		// Update b using h
-		updateRHS(bLU, hLU);
+		updateRHS(bLU, hLU, randNum);
 		// displayVector(bLU);
 
 		// Factorize A

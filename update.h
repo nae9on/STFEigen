@@ -11,6 +11,9 @@
 #include <Eigen/Sparse>
 #include <vector>
 #include <iostream>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
 
 typedef Eigen::Triplet<double> tripleData;
 
@@ -29,12 +32,12 @@ void insertCoefficient(int id, int i, int j, double w,
 }
 
 // Fill right hand side
-void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h) {
+void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h, boost::variate_generator<boost::mt19937, boost::normal_distribution<> > randNum) {
 	for (unsigned int i = 2; i < b.size() - 2; i++) {
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 		b(i) = h(i) -  p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ))
-				+ p3*(sqrt(h1) - sqrt(h2));
+				+ p3*(sqrt(h1)*randNum() - sqrt(h2)*randNum());
 	}
 }
 
