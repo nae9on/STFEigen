@@ -32,6 +32,7 @@ unsigned int N_Reals = 50;          // number of realizations
 //Discretization parameters
 double p1 = deltaT/(deltaX*deltaX);
 double p2 = deltaT/std::pow(deltaX,4);
+double p3 = 1/(deltaX)*sqrt(2*deltaT*Tmp);
 
 // output
 static unsigned int numFiles = 0;

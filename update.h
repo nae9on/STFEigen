@@ -31,7 +31,10 @@ void insertCoefficient(int id, int i, int j, double w,
 // Fill right hand side
 void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h) {
 	for (unsigned int i = 2; i < b.size() - 2; i++) {
-		b(i) = h(i) -  p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ));
+		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
+		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
+		b(i) = h(i) -  p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ))
+				+ p3*(sqrt(h1) - sqrt(h2));
 	}
 }
 
