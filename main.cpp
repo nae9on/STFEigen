@@ -14,6 +14,9 @@
 #include "input.h"
 #include "output.h"
 #include "update.h"
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
 
 std::stack<clock_t> tictoc_stack;
 
@@ -70,6 +73,16 @@ int main(int argc, char** argv) {
 
 	unsigned long int counter01 = 0;
 	bool flag = 1;
+
+	// Initialize random number generator
+	typedef boost::mt19937 RNGType; //boost will use mersenne twister generator.
+	RNGType rng(time(0)); // Defining the generator and intializing with time as seed.
+	boost::normal_distribution<> nd(0.0, 1.0); // Defining the distribution
+	// variate_generator combines a generator with a distribution.
+	boost::variate_generator<RNGType, boost::normal_distribution<> > randNum(rng, nd);
+
+	// Random number can be obtained by calling randNum()
+	std::cout<<"Random no = "<< randNum();
 
 	for (double time = deltaT; time <= endTime; time = time + deltaT) {
 
