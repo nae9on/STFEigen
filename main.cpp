@@ -11,12 +11,15 @@
 #include <stack>
 #include <ctime>
 #include <vector>
-#include "input.h"
-#include "output.h"
-#include "update.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/variate_generator.hpp>
+
+// My headers
+#include "input.h"
+#include "output.h"
+#include "update.h"
+#include "initialize_gx.h"
 
 std::stack<clock_t> tictoc_stack;
 
@@ -71,6 +74,10 @@ int main(int argc, char** argv) {
 	// Analyze pattern
 	solverLU.analyzePattern(ALU);
 
+	// Initialize gx
+	double * gx = new double[(global_N+1)*(global_N+1)] ();
+	gx_generator(gx);
+
 	unsigned long int counter01 = 0;
 	bool flag = 1;
 
@@ -92,7 +99,7 @@ int main(int argc, char** argv) {
 		// displayFullMatrix(ALU);
 
 		// Update b using h
-		updateRHS(bLU, hLU, randNum);
+		updateRHS(bLU, hLU, randNum, gx);
 		// displayVector(bLU);
 
 		// Factorize A
@@ -125,5 +132,6 @@ int main(int argc, char** argv) {
 
 	toc();
 
+	delete[] gx;
 	return 0;
 }
