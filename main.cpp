@@ -39,17 +39,17 @@ int main(int argc, char** argv) {
 	tic();
 
 	// Declaration and initialization of h
-	Eigen::VectorXd hLU(h_size);
+	Eigen::VectorXd hLU(global_h_size);
 	hLU.setOnes();
 	// displayVector(hLU);
 
 	// Declaration and initialization of A
 	// Declares a column-major sparse matrix type of double
-	Eigen::SparseMatrix<double, Eigen::ColMajor> ALU(h_size, h_size);
+	Eigen::SparseMatrix<double, Eigen::ColMajor> ALU(global_h_size, global_h_size);
 	// Reserve NNZ for A
-	ALU.reserve(Eigen::VectorXi::Constant(h_size, 5));
+	ALU.reserve(Eigen::VectorXi::Constant(global_h_size, 5));
 	std::vector<tripleData> coefficients;
-	updateA(coefficients, hLU, h_size);
+	updateA(coefficients, hLU, global_h_size);
 	ALU.setFromTriplets(coefficients.begin(), coefficients.end());
 	// displayFullMatrix(ALU);
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 	 */
 
 	// Declaration and initialization of b
-	Eigen::VectorXd bLU(h_size);
+	Eigen::VectorXd bLU(global_h_size);
 	bLU.setZero();
 	//displayVector(bLU);
 
@@ -84,10 +84,10 @@ int main(int argc, char** argv) {
 	// Random number can be obtained by calling randNum()
 	std::cout<<"Random no = "<< randNum();
 
-	for (double time = deltaT; time <= endTime; time = time + deltaT) {
+	for (double time = global_deltaT; time <= global_endTime; time = time + global_deltaT) {
 
 		// Update A using h
-		updateA(coefficients, hLU, h_size);
+		updateA(coefficients, hLU, global_h_size);
 		ALU.setFromTriplets(coefficients.begin(), coefficients.end());
 		// displayFullMatrix(ALU);
 
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 		// displayVector(hLU);
 
 		counter01 = counter01 + 1;
-		if (counter01 == seN) {
+		if (counter01 == global_seN) {
 			write_h_toFile(hLU, time);
 			std::cout << "\nData written to the file at time = " << time
 					<< "\n";

@@ -36,8 +36,8 @@ void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h, boost::variate_generator<b
 	for (unsigned int i = 2; i < b.size() - 2; i++) {
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
-		b(i) = h(i) -  p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ))
-				+ p3*(sqrt(h1)*randNum() - sqrt(h2)*randNum());
+		b(i) = h(i) -  global_p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ))
+				+ global_p3*(sqrt(h1)*randNum() - sqrt(h2)*randNum());
 	}
 }
 
@@ -72,11 +72,11 @@ void fillPentaDiagonal(std::vector<tripleData>& coefficients, Eigen::VectorXd h,
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 
-		coefficients.push_back(tripleData(i, i - 2, h2*p2));
-		coefficients.push_back(tripleData(i, i - 1, -p2*(h1+3*h2)));
-		coefficients.push_back(tripleData(i, i, 3*p2*(h1+h2)+1));
-		coefficients.push_back(tripleData(i, i + 1, -p2*(3*h1+h2)));
-		coefficients.push_back(tripleData(i, i + 2, h1*p2));
+		coefficients.push_back(tripleData(i, i - 2, h2*global_p2));
+		coefficients.push_back(tripleData(i, i - 1, -global_p2*(h1+3*h2)));
+		coefficients.push_back(tripleData(i, i, 3*global_p2*(h1+h2)+1));
+		coefficients.push_back(tripleData(i, i + 1, -global_p2*(3*h1+h2)));
+		coefficients.push_back(tripleData(i, i + 2, h1*global_p2));
 	}
 
 	// Fill right boundary
@@ -102,11 +102,11 @@ void updateA(std::vector<tripleData>& coefficients, Eigen::VectorXd h, unsigned 
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 
-		coefficients.push_back(tripleData(i, i - 2, h2*p2));
-		coefficients.push_back(tripleData(i, i - 1, -p2*(h1+3*h2)));
-		coefficients.push_back(tripleData(i, i, 3*p2*(h1+h2)+1));
-		coefficients.push_back(tripleData(i, i + 1, -p2*(3*h1+h2)));
-		coefficients.push_back(tripleData(i, i + 2, h1*p2));
+		coefficients.push_back(tripleData(i, i - 2, h2*global_p2));
+		coefficients.push_back(tripleData(i, i - 1, -global_p2*(h1+3*h2)));
+		coefficients.push_back(tripleData(i, i, 3*global_p2*(h1+h2)+1));
+		coefficients.push_back(tripleData(i, i + 1, -global_p2*(3*h1+h2)));
+		coefficients.push_back(tripleData(i, i + 2, h1*global_p2));
 	}
 
 	// Fill right boundary
