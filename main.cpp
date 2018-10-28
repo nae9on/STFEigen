@@ -76,6 +76,8 @@ int main(int argc, char** argv) {
 
 	// Initialize gx
 	double * gx = new double[(global_N+1)*(global_N+1)] ();
+	double * gx_f = new double[(global_N+1)*(global_N+1)] ();
+	double * g_noise = new double[(global_N+1)] ();
 	gx_generator(gx);
 
 	unsigned long int counter01 = 0;
@@ -97,6 +99,23 @@ int main(int argc, char** argv) {
 		updateA(coefficients, hLU, global_h_size);
 		ALU.setFromTriplets(coefficients.begin(), coefficients.end());
 		// displayFullMatrix(ALU);
+
+		// Update the gx_f matrix
+		for (unsigned long int k = 0; k < (global_N + 1); k++) {
+			double R_noise = randNum();
+			for (unsigned long int i = 0; i < (global_N + 1); i++) {
+				gx_f[i + (global_N + 1) * k] = gx[i + (global_N + 1) * k] * R_noise;
+
+			}
+		}
+		// Update the g_noise vector
+		for (unsigned long int i = 0; i < (global_N + 1); i++) {
+			g_noise[i] = 0;
+			for (unsigned long int k = 0; k < (global_N + 1); k++) {
+				g_noise[i] += gx_f[i + (global_N + 1) * k];
+
+			}
+		}
 
 		// Update b using h
 		updateRHS(bLU, hLU, randNum, gx);
@@ -133,5 +152,7 @@ int main(int argc, char** argv) {
 	toc();
 
 	delete[] gx;
+	delete[] gx_f;
+	delete[] g_noise;
 	return 0;
 }
