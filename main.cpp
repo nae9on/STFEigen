@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
 		}
 
 		// Update b using h
-		updateRHS(bLU, hLU, randNum, gx);
+		updateRHS(bLU, hLU, g_noise);
 		// displayVector(bLU);
 
 		// Factorize A
