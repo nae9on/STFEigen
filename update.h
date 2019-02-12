@@ -34,7 +34,7 @@ void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h, double * g_noise) {
 		double h1 = 2*h(i+1)*h(i+1)*h(i)*h(i)/(h(i+1)+h(i));
 		double h2 = 2*h(i-1)*h(i-1)*h(i)*h(i)/(h(i-1)+h(i));
 		b(i) = h(i) -  global_p1 * 0.5 * (( 1/h(i + 1) + 1/ h(i) ) * ( h(i+1) - h(i) ) - ( 1/h(i) + 1/h(i-1) ) * ( h(i) - h(i-1) ))
-				+ global_p3*(sqrt(h1)*g_noise[i] - sqrt(h2)*g_noise[i]);
+				+ global_p3*(sqrt(h1)*g_noise[i+1] - sqrt(h2)*g_noise[i]);
 	}
 }
 
