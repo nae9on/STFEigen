@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 void displayFullMatrix(Eigen::SparseMatrix<double, Eigen::ColMajor> A) {
 	std::cout << "\n\nMatrix :";
@@ -50,7 +51,7 @@ void write_h_toFile(Eigen::VectorXd hLU, double time) {
 	std::ofstream myfile(name, std::ofstream::out | std::ofstream::app);
 	if (myfile.is_open()) {
 		for (unsigned int i = 0; i < hLU.rows(); i++) {
-			myfile << hLU(i) << " ";
+			myfile << std::fixed << std::setprecision(15) << hLU(i) << " ";
 		}
 		myfile.close();
 	} else
