@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 
 	// Initialize random number generator
 	typedef boost::mt19937 RNGType; //boost will use mersenne twister generator.
-	RNGType rng(2); // Defining the generator and intializing with time as seed.
+	RNGType rng(time(0)); // Defining the generator and intializing with time as seed.
 	boost::normal_distribution<> nd(0.0, 1.0); // Defining the distribution
 	// variate_generator combines a generator with a distribution.
 	boost::variate_generator<RNGType, boost::normal_distribution<> > randNum(rng, nd);
