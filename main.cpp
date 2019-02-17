@@ -81,11 +81,11 @@ int main(int argc, char** argv) {
 	gx_generator(gx);
 
 	unsigned long int counter01 = 0;
-	bool flag = 1;
+	bool flag = 0;
 
 	// Initialize random number generator
 	typedef boost::mt19937 RNGType; //boost will use mersenne twister generator.
-	RNGType rng(time(0)); // Defining the generator and intializing with time as seed.
+	RNGType rng(2); // Defining the generator and intializing with time as seed.
 	boost::normal_distribution<> nd(0.0, 1.0); // Defining the distribution
 	// variate_generator combines a generator with a distribution.
 	boost::variate_generator<RNGType, boost::normal_distribution<> > randNum(rng, nd);
@@ -129,24 +129,28 @@ int main(int argc, char** argv) {
 		hLU = solverLU.solve(bLU);
 		// displayVector(hLU);
 
-		counter01 = counter01 + 1;
-		if (counter01 == global_seN) {
-			write_h_toFile(hLU, time);
-			std::cout << "\nData written to the file at time = " << time
-					<< "\n";
-			counter01 = 0;
-
-			// Check if film height is below the solid substrate
-			for (unsigned int i = 0; i <= sizeof(hLU); i++) {
-				if (hLU[i] <= 0.1) {
-					flag = 0;
-					break;
-				}
+		// Check if film height is below the solid substrate
+		for (unsigned int i = 0; i <= sizeof(hLU); i++) {
+			if (hLU[i] <= 0.1) {
+				flag = 1; // set termination flag to true
+				break;
 			}
 		}
 
-		if (flag == 0)
+		counter01 = counter01 + 1;
+		if (flag==1 || counter01%global_seN==0) {
+			write_h_toFile(hLU, time);
+			std::cout << "\nData written to the file at time = " << time
+					<< "\n";
+		}
+
+		if (flag == 1) {
+			std::cout << "\nTerminating time loop at time = "<<time;
+			std::cout << "\nTotal no of time iterations = "<<counter01;
+			std::cout << "\nTotal no of files written to disk = "<<floor(counter01/global_seN)+1<<"\n";
 			break;
+		}
+
 	}
 
 	toc();
