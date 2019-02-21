@@ -43,7 +43,8 @@ int main(int argc, char** argv) {
 
 	// Declaration and initialization of h
 	Eigen::VectorXd hLU(global_h_size);
-	hLU.setOnes();
+	//hLU.setOnes();
+	initialize_h(global_deltaX,hLU);
 	// displayVector(hLU);
 
 	// Declaration and initialization of A
