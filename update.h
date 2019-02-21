@@ -40,7 +40,7 @@ void updateRHS(Eigen::VectorXd& b, Eigen::VectorXd h, double * g_noise) {
 
 void initialize_h(double deltaX, Eigen::VectorXd h) {
 	for (unsigned int i = 0; i < h.size() ; i++) {
-		h(i) = 1 + 0.001*sin(6*(deltaX*i - 7)*(deltaX*i - 7));;
+		h(i) = 1 + 0.001*sin(6*(deltaX*i - 13)*(deltaX*i - 13));;
 	}
 
 }
